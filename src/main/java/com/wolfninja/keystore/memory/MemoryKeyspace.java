@@ -8,6 +8,10 @@ import com.google.common.collect.Maps;
 import com.wolfninja.keystore.api.KeyValue;
 import com.wolfninja.keystore.api.Keyspace;
 
+/**
+ * @author nick
+ * @since 1.0
+ */
 public class MemoryKeyspace implements Keyspace {
 
 	private final HashMap<String, String> keys = Maps.newHashMap();
@@ -28,7 +32,7 @@ public class MemoryKeyspace implements Keyspace {
 	public boolean checkAndSet(final String key, final String value, long version) {
 		Preconditions.checkNotNull(key, "Key should be provided");
 		Preconditions.checkNotNull(value, "Value should be provided");
-		
+
 		final String existing = keys.get(key);
 		if (existing != null && existing.hashCode() == version) {
 			keys.put(key, value);
@@ -41,7 +45,7 @@ public class MemoryKeyspace implements Keyspace {
 	@Override
 	public boolean delete(final String key) {
 		Preconditions.checkNotNull(key, "Key should not be null");
-		
+
 		return keys.remove(key) != null;
 	}
 
@@ -66,7 +70,7 @@ public class MemoryKeyspace implements Keyspace {
 	public boolean replace(final String key, final String value) {
 		Preconditions.checkNotNull(key, "Key should not be null");
 		Preconditions.checkNotNull(value, "Value should not be null");
-		
+
 		if (keys.containsKey(key)) {
 			if (!value.equals(keys.get(key))) {
 				keys.put(key, value);
@@ -80,7 +84,7 @@ public class MemoryKeyspace implements Keyspace {
 	public boolean set(final String key, final String value) {
 		Preconditions.checkNotNull(key, "Key should not be null");
 		Preconditions.checkNotNull(value, "Value should not be null");
-		
+
 		keys.put(key, value);
 		return true;
 	}

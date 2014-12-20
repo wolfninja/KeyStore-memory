@@ -7,6 +7,10 @@ import com.google.common.collect.Maps;
 import com.wolfninja.keystore.api.KeyValueStoreAdapter;
 import com.wolfninja.keystore.api.Keyspace;
 
+/**
+ * @author nick
+ * @since 1.0
+ */
 public class MemoryAdapter implements KeyValueStoreAdapter {
 
 	private final Map<String, MemoryKeyspace> keyspaces = Maps.newHashMap();
