@@ -56,7 +56,13 @@ public class MemoryKeyspace implements Keyspace {
 	}
 
 	@Override
-	public Optional<KeyValue> get(final String key) {
+	public Optional<String> get(String key) {
+		Preconditions.checkNotNull(key, "Key should not be null");
+		return Optional.fromNullable(keys.get(key));
+	}
+
+	@Override
+	public Optional<KeyValue> gets(final String key) {
 		Preconditions.checkNotNull(key, "Key should not be null");
 		final String value = keys.get(key);
 		if (value != null) {
