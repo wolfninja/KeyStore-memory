@@ -50,6 +50,19 @@ public class MemoryKeyspace implements Keyspace {
 	}
 
 	@Override
+	public boolean deletes(final String key, long version) {
+		Preconditions.checkNotNull(key, "Key should be provided");
+
+		final String existing = keys.get(key);
+		if (existing != null && existing.hashCode() == version) {
+			keys.remove(key);
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	@Override
 	public boolean exists(final String key) {
 		Preconditions.checkNotNull(key, "Key should not be null");
 		return keys.containsKey(key);
