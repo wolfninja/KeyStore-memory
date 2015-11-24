@@ -1,10 +1,9 @@
 package com.wolfninja.keystore.memory;
 
 import java.util.HashMap;
+import java.util.Objects;
+import java.util.Optional;
 
-import com.google.common.base.Optional;
-import com.google.common.base.Preconditions;
-import com.google.common.collect.Maps;
 import com.wolfninja.keystore.api.KeyValue;
 import com.wolfninja.keystore.api.Keyspace;
 
@@ -14,12 +13,12 @@ import com.wolfninja.keystore.api.Keyspace;
  */
 public class MemoryKeyspace implements Keyspace {
 
-	private final HashMap<String, String> keys = Maps.newHashMap();
+	private final HashMap<String, String> keys = new HashMap<>();
 
 	@Override
 	public boolean add(final String key, final String value) {
-		Preconditions.checkNotNull(key, "Key should be provided");
-		Preconditions.checkNotNull(value, "Value should be provided");
+		Objects.requireNonNull(key, "Key should be provided");
+		Objects.requireNonNull(value, "Value should be provided");
 
 		if (keys.containsKey(key)) {
 			return false;
@@ -30,8 +29,8 @@ public class MemoryKeyspace implements Keyspace {
 
 	@Override
 	public boolean checkAndSet(final String key, final String value, long version) {
-		Preconditions.checkNotNull(key, "Key should be provided");
-		Preconditions.checkNotNull(value, "Value should be provided");
+		Objects.requireNonNull(key, "Key should be provided");
+		Objects.requireNonNull(value, "Value should be provided");
 
 		final String existing = keys.get(key);
 		if (existing != null && existing.hashCode() == version) {
@@ -44,14 +43,14 @@ public class MemoryKeyspace implements Keyspace {
 
 	@Override
 	public boolean delete(final String key) {
-		Preconditions.checkNotNull(key, "Key should not be null");
+		Objects.requireNonNull(key, "Key should not be null");
 
 		return keys.remove(key) != null;
 	}
 
 	@Override
 	public boolean deletes(final String key, long version) {
-		Preconditions.checkNotNull(key, "Key should be provided");
+		Objects.requireNonNull(key, "Key should be provided");
 
 		final String existing = keys.get(key);
 		if (existing != null && existing.hashCode() == version) {
@@ -64,31 +63,31 @@ public class MemoryKeyspace implements Keyspace {
 
 	@Override
 	public boolean exists(final String key) {
-		Preconditions.checkNotNull(key, "Key should not be null");
+		Objects.requireNonNull(key, "Key should not be null");
 		return keys.containsKey(key);
 	}
 
 	@Override
 	public Optional<String> get(String key) {
-		Preconditions.checkNotNull(key, "Key should not be null");
-		return Optional.fromNullable(keys.get(key));
+		Objects.requireNonNull(key, "Key should not be null");
+		return Optional.ofNullable(keys.get(key));
 	}
 
 	@Override
 	public Optional<KeyValue> gets(final String key) {
-		Preconditions.checkNotNull(key, "Key should not be null");
+		Objects.requireNonNull(key, "Key should not be null");
 		final String value = keys.get(key);
 		if (value != null) {
 			return Optional.of(KeyValue.create(key, value, value.hashCode()));
 		} else {
-			return Optional.absent();
+			return Optional.empty();
 		}
 	}
 
 	@Override
 	public boolean replace(final String key, final String value) {
-		Preconditions.checkNotNull(key, "Key should not be null");
-		Preconditions.checkNotNull(value, "Value should not be null");
+		Objects.requireNonNull(key, "Key should not be null");
+		Objects.requireNonNull(value, "Value should not be null");
 
 		if (keys.containsKey(key)) {
 			if (!value.equals(keys.get(key))) {
@@ -101,8 +100,8 @@ public class MemoryKeyspace implements Keyspace {
 
 	@Override
 	public boolean set(final String key, final String value) {
-		Preconditions.checkNotNull(key, "Key should not be null");
-		Preconditions.checkNotNull(value, "Value should not be null");
+		Objects.requireNonNull(key, "Key should not be null");
+		Objects.requireNonNull(value, "Value should not be null");
 
 		keys.put(key, value);
 		return true;

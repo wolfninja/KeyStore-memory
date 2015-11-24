@@ -1,9 +1,9 @@
 package com.wolfninja.keystore.memory;
 
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
-import com.google.common.base.Preconditions;
-import com.google.common.collect.Maps;
 import com.wolfninja.keystore.api.KeyValueStoreAdapter;
 import com.wolfninja.keystore.api.Keyspace;
 
@@ -13,11 +13,11 @@ import com.wolfninja.keystore.api.Keyspace;
  */
 public class MemoryAdapter implements KeyValueStoreAdapter {
 
-	private final Map<String, MemoryKeyspace> keyspaces = Maps.newHashMap();
+	private final Map<String, MemoryKeyspace> keyspaces = new HashMap<>();
 
 	@Override
 	public Keyspace getKeyspace(final String keyspaceName) {
-		Preconditions.checkNotNull(keyspaceName, "KeyspaceName must not be null");
+		Objects.requireNonNull(keyspaceName, "KeyspaceName must not be null");
 		MemoryKeyspace keyspace = keyspaces.get(keyspaceName);
 		if (keyspace == null) {
 			keyspace = new MemoryKeyspace();
