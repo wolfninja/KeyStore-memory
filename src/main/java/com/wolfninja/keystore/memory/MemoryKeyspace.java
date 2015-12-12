@@ -8,7 +8,6 @@ import com.wolfninja.keystore.api.KeyValue;
 import com.wolfninja.keystore.api.Keyspace;
 
 /**
- * @author nick
  * @since 1.0
  */
 public class MemoryKeyspace implements Keyspace {

@@ -1,0 +1,2 @@
+Export-Package:  com.wolfninja.keystore.api; provide:=true
+Private-Package: com.wolfninja.keystore.memory
