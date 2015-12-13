@@ -4,6 +4,7 @@ import org.testng.annotations.Test;
 
 import com.wolfninja.keystore.api.BaseKeyValueStoreAdapterTest;
 
+@SuppressWarnings("javadoc")
 @Test
 public class MemoryAdapterContractTest extends BaseKeyValueStoreAdapterTest {
 

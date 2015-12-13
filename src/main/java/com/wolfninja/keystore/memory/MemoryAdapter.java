@@ -8,7 +8,7 @@ import com.wolfninja.keystore.api.KeyValueStoreAdapter;
 import com.wolfninja.keystore.api.Keyspace;
 
 /**
- * @since 1.0
+ * @since 0.1
  */
 public class MemoryAdapter implements KeyValueStoreAdapter {
 
