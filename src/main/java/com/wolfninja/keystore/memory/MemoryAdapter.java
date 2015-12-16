@@ -12,6 +12,14 @@ import com.wolfninja.keystore.api.Keyspace;
  */
 public class MemoryAdapter implements KeyValueStoreAdapter {
 
+	/**
+	 * @return new {@link MemoryAdapter} instance
+	 * @since 0.1
+	 */
+	public static MemoryAdapter create() {
+		return new MemoryAdapter();
+	}
+
 	private final Map<String, MemoryKeyspace> keyspaces = new HashMap<>();
 
 	@Override
