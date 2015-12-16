@@ -1,3 +1,22 @@
 language: java
 jdk:
-  - oraclejdk8
+- oraclejdk8
+before_install:
+- pip install --user codecov
+- openssl aes-256-cbc -pass pass:$ENCRYPTION_PASSWORD -in wolfninja_keystore.pubring.gpg.enc
+  -out wolfninja_keystore.pubring.gpg -d
+- openssl aes-256-cbc -pass pass:$ENCRYPTION_PASSWORD -in wolfninja_keystore.secring.gpg.enc
+  -out wolfninja_keystore.secring.gpg -d
+- openssl aes-256-cbc -pass pass:$ENCRYPTION_PASSWORD -in gradle.properties.enc -out
+  gradle.properties -d
+script: gradle check javadoc
+after_success:
+- codecov
+- .scripts/publish.sh
+cache:
+  directories:
+  - $HOME/.gradle
+  - $HOME/.m2
+env:
+  global:
+    secure: DVzfKA/U++OY+tIuoyFoUMxt2e1z9jeQCRF+5uNOn3fu2QCj6o4+2Xlb0S8YW1M9TfTY/CB6pvsOo4tIMbuwGPj+xQ8rD9/MKy2v8GZqnP5IkpRbqsOzGrrQGAjsc0x5plQq0lyboY9+v9qJxJEtLSy9dDfVbzHVN5K5Yv9PEcRDKHpMLVdjiwwT85Sto+pjeUeaQzL+u5jSRF0vsBPBhKR9v788tYKQGlbBHKgdj4YTy2QLZRck2N08flDaeqraCGCibjB+LzRPcqtrit5jBh9Ym4UV+Nf6tVx51ASVfW3+9f1sb0hWfPsSzrbF7JVZ/ZiffxbhAhbw1uvhJL0TdHwWJ2fIJJVX1zxipMEEukbZyWrLDOGNgLrgkW5GUs/Tk/i6AdjtEtbEpPckbHGje8NLX/3H78lW7UMA+bzITX2aRv6eR+c8ceH4H20p4/G3IOIiEeLGhAjrUZtdBxyJNX/GUEEilvvyqjw+cfXlzg9SOvNyQ9jnIzISFdQmoSi9Vyle6/MJZSaIWjk13hL/g04VSrBV5/1NjDSXnbw0ZI8JHvBnadzwMQulAsoKEVZEGvL1+YZC4FLJvICRQWU5Dz9MmfXTf8iGLDsyqwa4ESgYQqwjzq/cha9+JSAoq4wnTtNH12aicJqGixF6t9lWnUfqFefI4Boag4BQAloOInM=

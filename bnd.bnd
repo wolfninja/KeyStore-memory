@@ -1,1 +1,2 @@
-Export-Package:  com.wolfninja.keystore.memory
+-exportcontents: \
+	com.wolfninja.keystore.memory
