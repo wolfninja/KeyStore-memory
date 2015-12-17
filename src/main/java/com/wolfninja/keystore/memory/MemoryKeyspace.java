@@ -1,29 +1,29 @@
 package com.wolfninja.keystore.memory;
 
-import java.util.HashMap;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.wolfninja.keystore.api.KeyValue;
 import com.wolfninja.keystore.api.Keyspace;
 
 /**
+ * In-Memory implementation of {@link Keyspace} <br>
+ * <br>
+ * This implementation is thread safe.
+ * 
  * @since 0.1
  */
 public class MemoryKeyspace implements Keyspace {
 
-	private final HashMap<String, String> keys = new HashMap<>();
+	private final ConcurrentHashMap<String, String> keys = new ConcurrentHashMap<>(16);
 
 	@Override
 	public boolean add(final String key, final String value) {
 		Objects.requireNonNull(key, "Key should be provided");
 		Objects.requireNonNull(value, "Value should be provided");
 
-		if (keys.containsKey(key)) {
-			return false;
-		}
-		keys.put(key, value);
-		return true;
+		return keys.putIfAbsent(key, value) == null;
 	}
 
 	@Override
@@ -33,8 +33,7 @@ public class MemoryKeyspace implements Keyspace {
 
 		final String existing = keys.get(key);
 		if (existing != null && existing.hashCode() == version) {
-			keys.put(key, value);
-			return true;
+			return keys.replace(key, existing, value);
 		} else {
 			return false;
 		}
@@ -53,11 +52,9 @@ public class MemoryKeyspace implements Keyspace {
 
 		final String existing = keys.get(key);
 		if (existing != null && existing.hashCode() == version) {
-			keys.remove(key);
-			return true;
-		} else {
-			return false;
+			return keys.remove(key, existing);
 		}
+		return false;
 	}
 
 	@Override
@@ -67,7 +64,7 @@ public class MemoryKeyspace implements Keyspace {
 	}
 
 	@Override
-	public Optional<String> get(String key) {
+	public Optional<String> get(final String key) {
 		Objects.requireNonNull(key, "Key should not be null");
 		return Optional.ofNullable(keys.get(key));
 	}
@@ -88,13 +85,8 @@ public class MemoryKeyspace implements Keyspace {
 		Objects.requireNonNull(key, "Key should not be null");
 		Objects.requireNonNull(value, "Value should not be null");
 
-		if (keys.containsKey(key)) {
-			if (!value.equals(keys.get(key))) {
-				keys.put(key, value);
-				return true;
-			}
-		}
-		return false;
+		final String saved = keys.replace(key, value);
+		return saved != null && !saved.equals(value);
 	}
 
 	@Override
